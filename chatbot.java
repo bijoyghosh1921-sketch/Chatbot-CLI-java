@@ -8,7 +8,7 @@ import java.net.http.HttpResponse;
 import java.util.Random;
 import java.util.Scanner;
 
-public class chatbot {
+public class chatbot1 {
 
     private static final String OLLAMA_URL = "http://localhost:11434/api/generate";
     private static final String MODEL_NAME = "llama3.2"; // Change to mistral, phi3, etc.
@@ -102,23 +102,23 @@ public class chatbot {
     }
 
     public static void main(String[] args) {
-        Scanner kg = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
 
         System.out.println("=================================================");
         System.out.println("   JAVA OLLAMA TERMINAL - [Local Core Active]    ");
         System.out.println("=================================================");
-        System.out.println("Type your prompt below. Type 'exit' to quit.\n");
-
+        System.out.println("Type your prompt below. Type 'exit' to quit.\nType -v at the end of the prompt for voice feedback\n");
+        
         // Main Continuous Execution Loop
         while (true) {
             System.out.print("\nYOU > ");
-            String userInput = kg.nextLine().trim();
+            String userInput = scanner.nextLine().trim();
 
             if (userInput.equalsIgnoreCase("exit") || userInput.equalsIgnoreCase("quit")) {
                 System.out.println("\n[Terminating Core Session... Goodbye!]");
                 break;
             }
-
+            
             if (userInput.isEmpty()) {
                 continue;
             }
@@ -129,12 +129,17 @@ public class chatbot {
             String aiResponse = queryOllama(userInput);
 
             // 2. Trigger asynchronous audio output via PowerShell
-            speakAsync(aiResponse);
+            String a= userInput.substring(userInput.length()-2);
+            if(a.equalsIgnoreCase("-v")){
+                speakAsync(aiResponse);
+            }
+            
+            
 
             // 3. Render real-time typing animation to console interface
             streamTyping(aiResponse, 25);
         }
 
-        kg.close();
+        scanner.close();
     }
 }
